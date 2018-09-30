@@ -7,7 +7,7 @@
 CFLAGS  = -Wall
 
 output.o: lab2.cpp
-	g++ -std=c++11 lab2.cpp -pthread -o output
+	g++  lab2.cpp -std=c++11 -pthread -o output
 	time ./output
 
 clean:
