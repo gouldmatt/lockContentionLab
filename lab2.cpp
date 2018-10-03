@@ -5,7 +5,7 @@
 #include <time.h>
 using namespace std;
 
-bool all_threads_created = false;
+bool allThreadsCreated = false;
 int theDoor = 0; 
 atomic<int> nextTicket;
 atomic<int> nowServing; 
@@ -19,7 +19,6 @@ void releaseTicket();
 double threadTimer(); 
 
 int main(){
-    thread timerThread; 
     double averageTime = 0; 
 
     //SETUP
@@ -29,7 +28,9 @@ int main(){
         myThreads[i]=thread(spinner);
     }
 
-    all_threads_created = true;
+    allThreadsCreated = true;
+
+    averageTime = threadTimer(); 
 
     for(int i=0; i<1000; i++){
         myThreads[i].join();
@@ -41,7 +42,7 @@ int main(){
 }
 
 void spinner(){
-    while(!(all_threads_created)){
+    while(!allThreadsCreated){
         //cout << "Spinning...\n";
     } 
 
