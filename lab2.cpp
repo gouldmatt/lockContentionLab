@@ -6,7 +6,7 @@
 using namespace std;
 
 bool allThreadsCreated = false;
-int theDoor = 0; 
+int passedCrit = 0; 
 atomic<int> nextTicket;
 atomic<int> nowServing; 
 
@@ -65,7 +65,7 @@ void method3(){
     acquireTicket();
     // critical section
     
-    theDoor++; 
+    passedCrit++; 
 
     releaseTicket(); 
 }
