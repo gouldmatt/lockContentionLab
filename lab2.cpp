@@ -16,7 +16,6 @@ void method2();
 void method3();
 void acquireTicket();
 void releaseTicket(); 
-double threadTimer(); 
 
 int main(){
     chrono::steady_clock::time_point threadTimes[1000];
@@ -28,9 +27,8 @@ int main(){
         myThreads[i]=thread(spinner);
     }
 
-
-    allThreadsCreated = true;
     chrono::steady_clock::time_point begin = chrono::steady_clock::now();
+    allThreadsCreated = true;
 
 
     for(int i=0; i<1000; i++){
@@ -39,11 +37,10 @@ int main(){
     }
 
     for(int j = 0; j < 1000; j++){
-        
-        averageTime += chrono::duration_cast<std::chrono::microseconds>(threadTimes[j] - begin).count();
+        averageTime += chrono::duration_cast<std::chrono::milliseconds>(threadTimes[j] - begin).count();
     }
 
-    cout << endl << "average time in microseconds: " << averageTime / 1000 << endl << endl; 
+    cout << endl << "average time in milleseconds: " << averageTime / 1000 << endl << endl; 
     
     return 0;
 }
@@ -87,34 +84,3 @@ void releaseTicket(){
     nowServing.fetch_add(1,memory_order_relaxed); 
 }
 
-double threadTimer(){
-    double threadTimes[1000];
-    double averageTime = 0; 
-    clock_t threadT;
-    clock_t startT; 
-    int i = 0; 
-
-    allThreadsCreated = true;
-
-    startT = clock(); 
-
-    /*
-    while(!(passedCrit > 1000)){
-        threadT = clock();
-        cout << i << endl; 
-        threadTimes[i] = threadT; 
-        i++; 
-    }
-    /*
-
-    for(int j = 0; j < 1000; j++){
-        threadTimes[j] = threadTimes[j] - startT; 
-        averageTime += threadTimes[j];
-    }
-
-    cout << averageTime / 1000; 
-
-    return averageTime / 1000; 
-    */ 
-    return 0 ;
-}
