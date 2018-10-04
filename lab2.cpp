@@ -2,7 +2,7 @@
 #include <thread>
 #include <mutex>
 #include <atomic> 
-#include <time.h>
+#include <chrono>
 using namespace std;
 
 bool allThreadsCreated = false;
@@ -19,24 +19,31 @@ void releaseTicket();
 double threadTimer(); 
 
 int main(){
+    chrono::steady_clock::time_point threadTimes[1000];
     double averageTime = 0; 
 
     //SETUP
-    cout << "Making threads...\n";
     thread myThreads[1000];
     for(int i=0; i<1000; i++){
         myThreads[i]=thread(spinner);
     }
 
-    allThreadsCreated = true;
 
-    averageTime = threadTimer(); 
+    allThreadsCreated = true;
+    chrono::steady_clock::time_point begin = chrono::steady_clock::now();
+
 
     for(int i=0; i<1000; i++){
         myThreads[i].join();
+        threadTimes[i] = chrono::steady_clock::now();
     }
 
-    cout << "Threads finished!\n";
+    for(int j = 0; j < 1000; j++){
+        
+        averageTime += chrono::duration_cast<std::chrono::microseconds>(threadTimes[j] - begin).count();
+    }
+
+    cout << endl << "average time in microseconds: " << averageTime / 1000 << endl << endl; 
     
     return 0;
 }
@@ -46,8 +53,8 @@ void spinner(){
         //cout << "Spinning...\n";
     } 
 
-    method1();
-    method2();
+    //method1();
+    //method2();
     method3();
 }
 
@@ -81,5 +88,33 @@ void releaseTicket(){
 }
 
 double threadTimer(){
-    
+    double threadTimes[1000];
+    double averageTime = 0; 
+    clock_t threadT;
+    clock_t startT; 
+    int i = 0; 
+
+    allThreadsCreated = true;
+
+    startT = clock(); 
+
+    /*
+    while(!(passedCrit > 1000)){
+        threadT = clock();
+        cout << i << endl; 
+        threadTimes[i] = threadT; 
+        i++; 
+    }
+    /*
+
+    for(int j = 0; j < 1000; j++){
+        threadTimes[j] = threadTimes[j] - startT; 
+        averageTime += threadTimes[j];
+    }
+
+    cout << averageTime / 1000; 
+
+    return averageTime / 1000; 
+    */ 
+    return 0 ;
 }
