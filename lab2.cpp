@@ -57,8 +57,8 @@ void spinner(){
         //cout << "Spinning...\n";
     } 
     //method1();
-    method2();
-    //method3();
+    //method2();
+    method3();
 }
 
 void method1(){
