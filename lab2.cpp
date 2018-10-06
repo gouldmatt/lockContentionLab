@@ -47,8 +47,8 @@ int main(){
         averageTime += chrono::duration_cast<std::chrono::milliseconds>(threadTimes[j] - begin).count();
     }
 
-    cout << endl << "average time in milleseconds: " << averageTime / 1000 << endl << endl; 
-    
+    cout << endl << "average time in milliseconds: " << averageTime / 1000 << endl << endl; 
+
     return 0;
 }
 
@@ -56,9 +56,9 @@ void spinner(){
      while(!(allThreadsCreated)){
         //cout << "Spinning...\n";
     } 
-    //method1();
+    method1();
     //method2();
-    method3();
+    //method3();
 }
 
 void method1(){

@@ -1,4 +1,4 @@
-method1 = zeros(1,10);
+method1 = zeros(1,50);
 method2 = zeros(50,1);
 method3 = zeros(50,1);
 
@@ -21,15 +21,9 @@ end
 %}
 
 % construct graphs 
-scatter(1:10,method1)
-xlabel('Run #');
-ylabel('Time milliseconds');
-
-%{
 pd = makedist('Normal');
-pdf_normal = pdf(pd,method1)
-plot(method1,pdf_normal,'LineWidth',2)
-%}
-
+pdf_normal = pdf(pd,method1);
+x = 
+plot(x,pdf_normal,'LineWidth',2)
 
 
