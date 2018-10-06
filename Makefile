@@ -9,6 +9,8 @@ CFLAGS  = -Wall
 output.o: lab2.cpp
 	g++  lab2.cpp -std=c++11 -pthread -o output
 	time ./output
+	#valgrind --tool=memcheck --leak-check=full ./output
+	#valgrind --tool=helgrind ./output
 
 clean:
 	rm *.o output
