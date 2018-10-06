@@ -55,6 +55,9 @@ int main(){
 }
 
 void spinner(){
+     while(!(allThreadsCreated)){
+        //cout << "Spinning...\n";
+    } 
     //method1();
     method2();
     //method3();
