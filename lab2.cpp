@@ -9,6 +9,7 @@ bool allThreadsCreated = false;
 int passedCrit = 0; 
 atomic<int> nextTicket;
 atomic<int> nowServing; 
+mutex m;
 
 void spinner();
 void method1();
@@ -56,7 +57,13 @@ void spinner(){
 }
 
 void method1(){
-    //METHOD 1 PTHReAD shit
+    //METHOD 1: all threads race for the lock (mutex lock)
+
+    m.lock();
+    //Critical section start
+    passedCrit++;
+    //Critical section end
+    m.unlock();
 }
 
 void method2(){
