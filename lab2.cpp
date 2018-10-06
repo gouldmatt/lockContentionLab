@@ -9,7 +9,9 @@ bool allThreadsCreated = false;
 int passedCrit = 0; 
 atomic<int> nextTicket;
 atomic<int> nowServing; 
+atomic<int> nextIndex; 
 mutex m;
+bool waitArray[1000];
 
 void spinner();
 void method1();
@@ -21,12 +23,18 @@ void releaseTicket();
 int main(){
     chrono::steady_clock::time_point threadTimes[1000];
     double averageTime = 0; 
+    nextTicket = 0; 
+    nowServing = 0; 
+    nextIndex = 0; 
 
     //SETUP
     thread myThreads[1000];
     for(int i=0; i<1000; i++){
-        myThreads[i]=thread(spinner);
+        waitArray[i] = false; 
+        myThreads[i] = thread(spinner);
     }
+
+    waitArray[0] = true; 
 
     chrono::steady_clock::time_point begin = chrono::steady_clock::now();
     allThreadsCreated = true;
@@ -47,12 +55,8 @@ int main(){
 }
 
 void spinner(){
-    while(!allThreadsCreated){
-        //cout << "Spinning...\n";
-    } 
-
-    method1();
-    //method2();
+    //method1();
+    method2();
     //method3();
 }
 
@@ -68,22 +72,33 @@ void method1(){
 
 void method2(){
     //METHOD 2 ARRAY Stuff
+
+    atomic<int> myIndex; 
+    myIndex = nextIndex.fetch_add(1,memory_order_relaxed);
+
+    while(waitArray[myIndex] == false){}
+
+    //Critical section start
+    passedCrit++;
+    //Critical section end
+
+    waitArray[myIndex +1] = true; 
 }
 
 void method3(){
     //METHOD 3 ticket lock
 
     acquireTicket();
-    // critical section
-    
-    passedCrit++; 
+    //Critical section start
+    passedCrit++;
+    //Critical section end
 
     releaseTicket(); 
 }
 
 void acquireTicket(){
     atomic<int> myTicket; 
-    myTicket =  nextTicket.fetch_add(1,memory_order_relaxed);
+    myTicket =  nextTicket.fetch_add(1,memory_order_relaxed) - 1; // -1 is to start at 0 
     while (myTicket != nowServing){} 
 
 }
