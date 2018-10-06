@@ -22,9 +22,7 @@ void releaseTicket();
 
 int main(){
     chrono::steady_clock::time_point threadTimes[1000];
-    double averageTime = 0; 
-    nextTicket = 0; 
-    nowServing = 0; 
+    double averageTime = 0;  
     nextIndex = 0; 
 
     //SETUP
@@ -59,8 +57,8 @@ void spinner(){
         //cout << "Spinning...\n";
     } 
     //method1();
-    method2();
-    //method3();
+    //method2();
+    method3();
 }
 
 void method1(){
@@ -101,7 +99,7 @@ void method3(){
 
 void acquireTicket(){
     atomic<int> myTicket; 
-    myTicket =  nextTicket.fetch_add(1,memory_order_relaxed) - 1; // -1 is to start at 0 
+    myTicket =  nextTicket.fetch_add(1,memory_order_relaxed); // -1 is to start at 0 
     while (myTicket != nowServing){} 
 
 }
