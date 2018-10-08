@@ -2,41 +2,40 @@
 #include <thread>
 #include <mutex>
 #include <atomic> 
-#include <chrono>
+#include <time.h>
+
 using namespace std;
 
-bool allThreadsCreated = false;
+bool all_threads_created = false;
+bool lockArray[1000];
 int passedCrit = 0; 
 atomic<int> nextTicket;
 atomic<int> nowServing; 
-atomic<int> nextIndex; 
+atomic<int> nextIndex;
 mutex m;
-bool waitArray[1000];
+thread myThreads[1000];
 
-void spinner();
+void spinner(int i);
 void method1();
-void method2();
+void method2(int i);
 void method3();
 void acquireTicket();
 void releaseTicket(); 
+double threadTimer(); 
 
 int main(){
     chrono::steady_clock::time_point threadTimes[1000];
-    double averageTime = 0;  
-    nextIndex = 0; 
+    double averageTime = 0;
+    nextIndex = 0;
+    lockArray[0] = true;
 
-    //SETUP
-    thread myThreads[1000];
+    //SETUP 
     for(int i=0; i<1000; i++){
-        waitArray[i] = false; 
-        myThreads[i] = thread(spinner);
+        myThreads[i]=thread(spinner, i);
     }
 
-    waitArray[0] = true; 
-
     chrono::steady_clock::time_point begin = chrono::steady_clock::now();
-    allThreadsCreated = true;
-
+    all_threads_created = true;
 
     for(int i=0; i<1000; i++){
         myThreads[i].join();
@@ -47,18 +46,19 @@ int main(){
         averageTime += chrono::duration_cast<std::chrono::milliseconds>(threadTimes[j] - begin).count();
     }
 
-    cout << endl << "average time in milliseconds: " << averageTime / 1000 << endl << endl; 
+    cout << averageTime / 1000; 
 
     return 0;
 }
 
-void spinner(){
-     while(!(allThreadsCreated)){
+void spinner(int i){
+    while(!(all_threads_created)){
         //cout << "Spinning...\n";
     } 
-    method1();
-    //method2();
-    //method3();
+
+    //method1();
+    //method2(i);
+    method3();
 }
 
 void method1(){
@@ -71,35 +71,36 @@ void method1(){
     m.unlock();
 }
 
-void method2(){
-    //METHOD 2 ARRAY Stuff
-
-    atomic<int> myIndex; 
-    myIndex = nextIndex.fetch_add(1,memory_order_relaxed);
-
-    while(waitArray[myIndex] == false){}
+void method2(int i){
+    //METHOD 2: spinlock using array
+    
+    while(!lockArray[i]){
+        //maybe sleep here
+        this_thread::sleep_for(chrono::nanoseconds(1));
+    }
 
     //Critical section start
+    //cout<<i<<endl;
     passedCrit++;
     //Critical section end
-
-    waitArray[myIndex +1] = true; 
+    lockArray[i] = false;
+    lockArray[i+1] = true;    
 }
 
 void method3(){
     //METHOD 3 ticket lock
 
     acquireTicket();
-    //Critical section start
-    passedCrit++;
-    //Critical section end
+    // critical section
+    
+    passedCrit++; 
 
     releaseTicket(); 
 }
 
 void acquireTicket(){
     atomic<int> myTicket; 
-    myTicket =  nextTicket.fetch_add(1,memory_order_relaxed); // -1 is to start at 0 
+    myTicket =  nextTicket.fetch_add(1,memory_order_relaxed);
     while (myTicket != nowServing){} 
 
 }
