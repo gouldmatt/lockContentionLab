@@ -46,7 +46,7 @@ int main(){
         averageTime += chrono::duration_cast<std::chrono::milliseconds>(threadTimes[j] - begin).count();
     }
 
-    cout << averageTime / 1000; 
+    cout << endl << endl <<  averageTime / 1000 << endl << endl; 
 
     return 0;
 }

@@ -22,19 +22,32 @@ end
 figure
 h1 = scatter(method1,1:100,'b','o');
 hold on
-h2 = scatter(method2,1:100,'k','o');
+h2 = scatter(method2,1:100,'k','+');
 hold on
-h3 = scatter(method3,1:100,'g','o');
+h3 = scatter(method3,1:100,'g','p');
 legend([h1,h2,h3], 'Method 1', 'Method 2', 'Method 3')
 ylabel('Run #');
 xlabel('Time milliseconds');
+xlim([0,100]); 
 hold off 
 
 %{
 pd = makedist('Normal');
-pdf_normal = pdf(pd,method1)
-plot(method1,pdf_normal,'LineWidth',2)
+pdf_normal = pdf(pd,method1);
+plot(method1,pdf_normal,'LineWidth',2);
+
+pd = makedist('Normal');
+pdf_normal = pdf(pd,method1);
+plot(method2,pdf_normal,'LineWidth',2);
+
+
+pd = makedist('Normal');
+pdf_normal = pdf(pd,method1);
+plot(method3,pdf_normal,'LineWidth',2);
 %}
+
+
+
 
 
 
