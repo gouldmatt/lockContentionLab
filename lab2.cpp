@@ -25,7 +25,7 @@ double threadTimer();
 
 int main(){
     passedCrit = 0;
-    chrono::steady_clock::time_point threadTimes[100];
+    chrono::steady_clock::time_point threadTimes[1000];
     double averageTime = 0;
     nextIndex = 0;
     lockArray[0] = true;
@@ -47,9 +47,7 @@ int main(){
         averageTime += chrono::duration_cast<std::chrono::milliseconds>(threadTimes[j] - begin).count();
     }
 
-    cout << endl << endl <<  averageTime / 1000 << endl << endl; 
-
-    cout << endl << endl << "passed crit. : " << passedCrit << endl << endl; 
+    cout <<  averageTime / 1000; 
 
     return 0;
 }
@@ -60,8 +58,8 @@ void spinner(int i){
     } 
 
     //method1();
-    method2(i);
-    //method3();
+    //method2(i);
+    method3();
 }
 
 void method1(){
