@@ -32,19 +32,21 @@ xlim([0,100]);
 hold off 
 
 %{
+figure
 pd = makedist('Normal');
 pdf_normal = pdf(pd,method1);
 plot(method1,pdf_normal,'LineWidth',2);
-
-pd = makedist('Normal');
-pdf_normal = pdf(pd,method1);
-plot(method2,pdf_normal,'LineWidth',2);
-
-
-pd = makedist('Normal');
-pdf_normal = pdf(pd,method1);
-plot(method3,pdf_normal,'LineWidth',2);
 %}
+figure
+norm(method1); 
+
+figure
+norm(method2);
+
+
+figure
+norm(method3);
+
 
 
 

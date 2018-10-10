@@ -24,7 +24,8 @@ void releaseTicket();
 double threadTimer(); 
 
 int main(){
-    chrono::steady_clock::time_point threadTimes[1000];
+    passedCrit = 0;
+    chrono::steady_clock::time_point threadTimes[100];
     double averageTime = 0;
     nextIndex = 0;
     lockArray[0] = true;
@@ -46,7 +47,9 @@ int main(){
         averageTime += chrono::duration_cast<std::chrono::milliseconds>(threadTimes[j] - begin).count();
     }
 
-    cout << endl << endl <<  averageTime / 1000 << endl << endl; 
+    //cout << endl << endl <<  averageTime / 1000 << endl << endl; 
+
+    cout << endl << endl << "passed crit. : " << passedCrit << endl << endl; 
 
     return 0;
 }
@@ -57,8 +60,8 @@ void spinner(int i){
     } 
 
     //method1();
-    //method2(i);
-    method3();
+    method2(i);
+    //method3();
 }
 
 void method1(){
@@ -72,19 +75,21 @@ void method1(){
 }
 
 void method2(int i){
-    //METHOD 2: spinlock using array
+    //METHOD 2: spinlock using array    
+    while(!lockArray[i]){}
     
-    while(!lockArray[i]){
-        //maybe sleep here
-        this_thread::sleep_for(chrono::nanoseconds(1));
-    }
-
     //Critical section start
-    //cout<<i<<endl;
     passedCrit++;
     //Critical section end
+
     lockArray[i] = false;
-    lockArray[i+1] = true;    
+    
+    if(i != 999){
+        lockArray[i+1] = true;    
+    }
+
+    cout << passedCrit << " " ; 
+    cout << i << endl;
 }
 
 void method3(){
