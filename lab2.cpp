@@ -47,7 +47,7 @@ int main(){
         averageTime += chrono::duration_cast<std::chrono::milliseconds>(threadTimes[j] - begin).count();
     }
 
-    cout <<  averageTime / 1000; 
+    cout <<  averageTime / 1000 << endl << endl; 
 
     return 0;
 }
@@ -58,8 +58,8 @@ void spinner(int i){
     } 
 
     //method1();
-    //method2(i);
-    method3();
+    method2(i);
+    //method3();
 }
 
 void method1(){
@@ -74,11 +74,15 @@ void method1(){
 
 void method2(int i){
     //METHOD 2: spinlock using array    
-    while(!lockArray[i]){}
+    while(!lockArray[i]){
+        this_thread::sleep_for(chrono::milliseconds(10));
+    }
     
     //Critical section start
     passedCrit++;
     //Critical section end
+
+    cout << passedCrit << endl;
 
     lockArray[i] = false;
     
