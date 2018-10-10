@@ -47,7 +47,7 @@ int main(){
         averageTime += chrono::duration_cast<std::chrono::milliseconds>(threadTimes[j] - begin).count();
     }
 
-    //cout << endl << endl <<  averageTime / 1000 << endl << endl; 
+    cout << endl << endl <<  averageTime / 1000 << endl << endl; 
 
     cout << endl << endl << "passed crit. : " << passedCrit << endl << endl; 
 
@@ -87,9 +87,6 @@ void method2(int i){
     if(i != 999){
         lockArray[i+1] = true;    
     }
-
-    cout << passedCrit << " " ; 
-    cout << i << endl;
 }
 
 void method3(){
